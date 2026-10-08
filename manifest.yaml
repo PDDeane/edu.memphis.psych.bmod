@@ -1,0 +1,40 @@
+# manifest.yaml — the behaviour-modification course, as its own collection.
+#
+# LIFTED OUT OF edu.memphis.psych ON 2026-10-08. It was one course inside that
+# collection, which carries 26 other .olx besides it. A collection is the unit a
+# namespace names, so a course that moves to its own repository takes a namespace
+# with it: two collections cannot both mount at `content/edu.memphis.psych`.
+#
+# THE STORE DID NOT MOVE WITH IT. $COURSE_DATA is keyed on the RUBRIC and the
+# INSTRUMENT -- `rubrics/bmod_rubric`, `instruments/bmod` -- and never on the
+# namespace, so the records, the archive and every sha stay exactly where they
+# were. That is the whole benefit of having split the store by owner.
+
+title: Behaviour Modification
+namespace: edu.memphis.psych.bmod
+
+# THIS COLLECTION'S OWN FILENAMES, read by `paths._manifest` and by
+# `enforce/courseData.collectionDeclares`. They moved here with the files they
+# name; nothing in the engine spells them.
+course_olx: bmod_course.olx
+rubric_component: bmod_rubric.olx
+handout_olx: bmod_handout%d.olx
+
+classes:
+  - no-translanguaging
+
+content_notice: >
+  Course content Copyright &copy; 2026 by Mollie Blair Anderson, Randy Floyd,
+  Emily N Srisarajivakul, and Kara Watkins, with contributions from Piotr Mitros
+  and Paul Deane. Licensed under
+  [AGPLv3](https://www.gnu.org/licenses/agpl-3.0.html). Source available on
+  [GitHub](https://github.com/olxhub/edu.memphis.psych.bmod).
+
+# THE ROUTES CAME WITH THE COURSE, rebased on the new namespace. They kept their
+# PATHS -- /bmod, /bmod/handout1 -- so every link anyone has written still
+# resolves; only the id behind each one moved.
+routes:
+  /bmod: edu.memphis.psych.bmod/bmod_course
+  /bmod/handout1: edu.memphis.psych.bmod/bmod_handout1
+  /bmod/handout2: edu.memphis.psych.bmod/bmod_handout2
+  /bmod/handout3: edu.memphis.psych.bmod/bmod_handout3
