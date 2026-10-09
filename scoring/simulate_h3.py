@@ -55,6 +55,51 @@ import re
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+# THE ENGINE, FOUND FROM HERE. This module lives in the COURSE's repository
+# since 2026-10-09, not the engine's, so nothing has put the engine on the path
+# the way `scoring/<course>/` used to. Loaded for its declared role through
+# `course_code` the engine is already imported and this is a no-op; run directly
+# as a CLI, it is the only thing that makes the imports below resolve.
+#
+# BY MARKER, AND NAMING NO REPOSITORY. The obvious spelling is to join this
+# path to `../../edu.memphis.psych/scoring`, and that is a hardcoded course
+# namespace -- `edu.memphis.psych` is a mounted collection, and writing one into
+# code is the thing `check_no_hardcoded_course_namespace` exists to catch. It is
+# also simply wrong as soon as either repository is renamed or relocated. So:
+# $SCORING_ENGINE if set, else the first sibling directory carrying
+# `scoring/paths.py`, sorted so the answer does not depend on readdir order.
+import os as _os
+import sys as _sys
+
+
+def _engine() -> str | None:
+    env = _os.environ.get("SCORING_ENGINE")
+    if env and _os.path.isfile(_os.path.join(env, "paths.py")):
+        return env
+    here = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+    parent = _os.path.dirname(here)
+    try:
+        siblings = sorted(_os.listdir(parent))
+    except OSError:
+        return None
+    for name in siblings:
+        cand = _os.path.join(parent, name, "scoring")
+        if _os.path.isfile(_os.path.join(cand, "paths.py")):
+            return cand
+    return None
+
+
+if "paths" not in _sys.modules:
+    _found = _engine()
+    if _found is None:
+        raise SystemExit(
+            "simulate_h3: the scoring engine is not importable. This module "
+            "lives in the course repository and finds the engine as a sibling "
+            "carrying `scoring/paths.py`; set $SCORING_ENGINE to that directory, "
+            "or run it through its declared `reconstruction` role.")
+    if _found not in _sys.path:
+        _sys.path.insert(0, _found)
+
 from backends import BackendError, make_backend
 from docx_text import chart_labels, extract_media
 from forms import config, find_submissions
