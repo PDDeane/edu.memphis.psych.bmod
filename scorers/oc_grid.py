@@ -21,7 +21,26 @@ finding F2: *"38 lines, no docstring, no functions, no `__main__` guard: its
 whole body runs on import and prints a grid to stdout ... importing it for any
 reason executes it."* Importing it is now free; running it is deliberate.
 
-    python3 scorers/oc_grid.py        # from this repository
+AND THE USAGE LINE WAS STILL WRONG, corrected 2026-10-15. It read
+`python3 scorers/oc_grid.py  # from this repository` and CANNOT work as
+written: running a script puts the SCRIPT's directory on `sys.path[0]`, not
+the working directory, so `import scorers` fails before anything else is
+tried. The note "from this repository" described a cwd that python never
+consults.
+
+NEITHER IMPORT COMES FROM THIS REPOSITORY, which is the part that misleads.
+`import scorers` does NOT mean the directory this file sits in -- it binds
+`edu.memphis.psych/scoring/scorers.py`, a MODULE with the same name -- and
+`forms` is `edu.memphis.psych/scoring/forms.py` beside it. Both live in the
+engine repository, so that is the only path entry needed; this repository's
+own root is not required at all.
+
+    # from the root of THIS repository:
+    PYTHONPATH="../edu.memphis.psych/scoring" python3 scorers/oc_grid.py
+
+`python3 -m scorers.oc_grid` DOES NOT WORK and should not be reached for: the
+name `scorers` resolves to that module rather than to a package, so `-m` dies
+on "__path__ attribute not found on 'scorers'".
 """
 import itertools, json
 import scorers, forms as H
