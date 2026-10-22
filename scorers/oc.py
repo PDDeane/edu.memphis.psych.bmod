@@ -922,6 +922,29 @@ def resolve_operand(a: dict, key: str):
 GATE = ("names_behavior", "names_stimulus", "contingent",
         "follows_behavior", "you_arrange_it")
 
+# AND IT IS PUBLISHED, 2026-10-21, on the user's instruction: "publish the
+# twelve as a scorer declaration; the oc scorer should be python."
+#
+# WHY A DECLARATION AND NOT A MOVE. These rows stay HERE -- the gate, the four
+# type criteria and the eight items they apply to are operant conditioning's,
+# and `probe._answered_under` asks this module for them rather than knowing
+# them, which is the arrangement goal E built. Moving them into
+# `course_metadata_source` would answer the parity question by undoing that.
+#
+# WHAT PUBLISHING IS FOR. The other engine had no way to read them at all, so
+# `probe_receipts_match_shipping` was assembled there with twelve rows missing
+# and no one could see it: both sides reported clean and the payloads differed.
+# A scorer names what it contributes in `DECLARES`, the export asks every
+# scorer THIS COURSE uses -- so the engine still never learns a subject -- and
+# writes each as `SCORER_<NAME>` in the course file.
+#
+# THE PUBLISHED COPY CANNOT GO STALE SILENTLY.
+# `check_scorer_declarations_are_current` compares it against this table on
+# every audit, order-sensitively, because a stale copy read by one engine while
+# the other reads the source is the exact divergence publishing is meant to
+# close.
+DECLARES = ("ANSWERED_UNDER",)
+
 ANSWERED_UNDER = {
     **{(it, "is_operant_conditioning"): GATE
        for it in ("PR", "NR", "PP", "NP", "DAY1", "WK1", "DAY2", "WK2")},
